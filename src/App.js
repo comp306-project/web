@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Header } from './header';
+import Header from './header';
 import  Mmap from './map';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -25,7 +25,8 @@ export default function App() {
 		<ThemeProvider theme={theme}>
       <CssBaseline />
 			<Header theme={theme} />
-			<Mmap theme={(prefersDarkMode) ? 'dark' : 'light'}/>
     </ThemeProvider>
   );
 }
+
+//<Mmap theme={(prefersDarkMode) ? 'dark' : 'light'}/>
