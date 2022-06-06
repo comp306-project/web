@@ -40,8 +40,8 @@ export default function App() {
 	const [q1_res, q1_set_res] = useState(null);
 	// q2
 	const [q2_firstdriverid, q2_set_firstdriverid] = useState(1);
-	const [q2_seconddriverid, q2_set_seconddriverid] = useState(783);
-	const [q2_raceid, q2_set_raceid] = useState(1000);
+	const [q2_seconddriverid, q2_set_seconddriverid] = useState(830);
+	const [q2_raceid, q2_set_raceid] = useState(1009);
 	const [q2_res, q2_set_res] = useState(null);
 	// q3
 	const [q3_raceid, q3_set_raceid] = useState(1000);
@@ -50,6 +50,7 @@ export default function App() {
 	const [q4_circuit_ref, q4_set_circuit_ref] = useState('Istanbul Park');
 	const [q4_res, q4_set_res] = useState(null);
 	// q5
+	const [q5_res, q5_set_res] = useState(null);
 	// q6
 
 	return (
@@ -242,6 +243,7 @@ export default function App() {
 					sx={{paddingRight: '7px'}}
 					onChange={(e) => {q4_set_circuit_ref(e.target.value);}}
 				/>
+
 				
 				<Button variant="outlined" onClick={() => {
 					POST('/average_race_results_by_pitstop_all_races_at_circuit', 
