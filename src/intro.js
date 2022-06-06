@@ -41,34 +41,34 @@ export default function Intro(){
 						<Typography
 								variant='h5'
 						>
-						Description
+							Description
 						</Typography>
 						<Typography
 								variant='body1'
 						>
-						Formula 1 queries
+							Formula 1 queries
 						</Typography>
 				</Box>
 				<Box>
 						<Typography
 								variant='h5'
 						>
-						Technologies
+							Technologies
 						</Typography>
 						<Typography
 								variant='body1'
 						>
-						Frontend: ReactJS
+							Frontend: ReactJS
 						</Typography>
 						<Typography
 								variant='body1'
 						>
-						DBMS: mysql  
+							DBMS: mysql  
 						</Typography>
 						<Typography
 								variant='body1'
 						>
-						Backend: Python Flask  
+							Backend: Python Flask  
 						</Typography>
 				</Box>
 			</Box>
