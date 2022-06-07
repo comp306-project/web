@@ -7,7 +7,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import { Button, Box, Typography, TextField, Divider, InputAdornment } from '@mui/material';
+import { Button, Box, Typography, TextField, Divider, InputAdornment, } from '@mui/material';
+
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 function POST(path, data) {
 	return fetch(`http://localhost:5000${path}`,
@@ -20,6 +22,58 @@ function POST(path, data) {
 	  }
 	)
 }
+
+const q3_columns = [
+	{field: 'Pitstopcount', headerName: 'Pitstop Count', type: 'number', width: 150},
+	{field: 'AVG(position_order)', headerName: 'Average Position Order', type: 'number', width: 250},
+];
+
+const q4_columns = [
+	{field: 'Pitstopcount', headerName: 'Pitstop Count', type: 'number', width: 150},
+	{field: 'AVG(position_order)', headerName: 'Average Position Order', type: 'number', width: 250},
+];
+
+const q5_columns = [
+	{field: 'nationality', headerName: 'Nationality', width: 150},
+	{field: 'TotalDriverswhoNeverWon', headerName: 'Total Drivers Who never Won', type: 'number', width: 250},
+];
+
+const q6_columns = [
+	{field: 'forename', headerName: 'First Name', width: 150},
+	{field: 'surname', headerName: 'Last Name', width: 150},
+];
+
+const q7_columns = [
+	{field: 'forename', headerName: 'First Name', width: 150},
+	{field: 'surname', headerName: 'Last Name', width: 150},
+	{field: 'nationality', headerName: 'Nationality', width: 150},
+];
+
+const q8_columns = [
+	{field: 'surname', headerName: 'Last Name', width: 150},
+	{field: 'AVG(PITSTOP.duration)', headerName: 'Average Pitstop Duration', type: 'number', width: 250},
+];
+
+const q9_columns = [
+	{field: 'surname', headerName: 'Last Name', width: 150},
+	{field: 'AVG(RESULTS.position_order)', headerName: 'Average Position Order', type: 'number', width: 250},
+];
+
+const q10_columns = [
+	{field: 'driver_id', headerName: 'Driver ID', type: 'number', width: 150},
+	{field: 'forename', headerName: 'First Name', width: 150},
+	{field: 'surname', headerName: 'Last Name', width: 150},
+	{field: 'year', headerName: 'Year', width: 150},
+	{field: 'nationality', headerName: 'Nationality', width: 150},
+];
+
+const q11_columns = [
+	{field: 'TeamName', headerName: 'Team Name', width: 150},
+	{field: 'nationality', headerName: 'Nationality', width: 150},
+	{field: 'BestPosition', headerName: 'Best Position', width: 150},
+	{field: 'FirstYear', headerName: 'First Year', width: 150},
+	{field: 'LastYear', headerName: 'Last Year', width: 150},
+];
 
 export default function App() {
 	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -50,8 +104,38 @@ export default function App() {
 	const [q4_circuit_ref, q4_set_circuit_ref] = useState('Istanbul Park');
 	const [q4_res, q4_set_res] = useState(null);
 	// q5
+	const [q5_position, q5_set_position] = useState(2);
 	const [q5_res, q5_set_res] = useState(null);
 	// q6
+	const [q6_nationality, q6_set_nationality] = useState('British');
+	const [q6_res, q6_set_res] = useState(null);
+
+	// q7
+	const [q7_year, q7_set_year] = useState(2014);
+	const [q7_res, q7_set_res] = useState(null);
+
+	// q8
+	const [q8_raceid, q8_set_raceid] = useState(1002);
+	const [q8_res, q8_set_res] = useState(null);
+
+	// q9
+	const [q9_year, q9_set_year] = useState(2001);
+	const [q9_res, q9_set_res] = useState(null);
+
+	// q10
+	const [q10_res, q10_set_res] = useState(null);
+
+	// q11
+	const [q11_res, q11_set_res] = useState(null);
+
+	// q12
+	const [q12_won_count, q12_set_won_count] = useState(100);
+	const [q12_res, q12_set_res] = useState(null);
+
+	// q13
+	const [q13_driver_surname, q13_set_driver_surname] = useState('Hamilton');
+	const [q13_circuit_ref, q13_set_circuit_ref] = useState('Istanbul Park');
+	const [q13_res, q13_set_res] = useState(null);
 
 	return (
     <ThemeProvider theme={theme}>
@@ -219,6 +303,9 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
 							q3_set_res(data);
 						});
 				}}>average_race_results_by_pitstop_single_race</Button>
@@ -226,27 +313,14 @@ export default function App() {
 			</Box>
 
 			{q3_res !== null && 
-				q3_res.map((object, i) => {
-					return (
-						<Box key={i} paddingLeft={2} paddingTop={2}>
-							<TextField 
-								label='Pitstop Count'
-								sx={{paddingRight: '7px'}}
-								InputProps={{
-									readOnly: true,
-								}}
-								defaultValue={object['Pitstopcount']}
-							/>
-							<TextField 
-								label='Average Position Order'
-								InputProps={{
-									readOnly: true,
-								}}
-								defaultValue={object['AVG(position_order)']}
-							/>
-						</Box>
-					);
-				})
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 300, width: '50%' }}>
+					<DataGrid
+						rows={q3_res}
+						columns={q3_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
 			}
 		</Box>
 
@@ -282,35 +356,24 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
 							q4_set_res(data);
 						});
 				}}>average_race_results_by_pitstop_all_races_at_circuit</Button>
 			</Box>
 
 			{q4_res !== null && 
-				q4_res.map((object, i) => {
-					return (
-						<Box key={i} paddingLeft={2} paddingTop={2}>
-							<TextField 
-								label='Pitstop Count'
-								sx={{paddingRight: '7px'}}
-								InputProps={{
-									readOnly: true,
-								}}
-								defaultValue={object['Pitstopcount']}
-							/>
-							<TextField 
-								label='Average Position Order'
-								InputProps={{
-									readOnly: true,
-								}}
-								defaultValue={object['AVG(position_order)']}
-							/>
-						</Box>
-					);
-				})
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 300, width: '50%' }}>
+					<DataGrid
+						rows={q4_res}
+						columns={q4_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
 			}
-
 
 		</Box>
 
@@ -325,6 +388,15 @@ export default function App() {
 				>
 					Given a position, find the number of drivers who have never finished a race in that position grouped by nationality
 				</Typography>
+
+				<TextField
+					label="Position"
+					helperText="Please enter"
+					value={q5_position}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q5_set_position(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/find_countries_wins', 
 						JSON.stringify({position : 2}))
@@ -336,9 +408,24 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q5_set_res(data);
 						});
 				}}>find_countries_wins</Button>
+
 			</Box>
+			{q5_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '50%' }}>
+					<DataGrid
+						rows={q5_res}
+						columns={q5_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -352,9 +439,18 @@ export default function App() {
 				>
 					Given a nationality, display names and surnames of drivers from that nation
 				</Typography>
+
+				<TextField
+					label="Nationality"
+					helperText="Please enter"
+					value={q6_nationality}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q6_set_nationality(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/find_country_drivers', 
-						JSON.stringify({nationality : 'British'}))
+						JSON.stringify({nationality : q6_nationality}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -363,9 +459,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q6_set_res(data);
 						});
 				}}>find_country_drivers</Button>
 			</Box>
+			{q6_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '40%' }}>
+					<DataGrid
+						rows={q6_res}
+						columns={q6_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -379,9 +489,18 @@ export default function App() {
 				>
 					Given a year, return all drivers who scored a podium place in that season.
 				</Typography>
+
+				<TextField
+					label="Nationality"
+					helperText="Please enter"
+					value={q7_year}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q7_set_year(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/find_drivers_who_have_been_in_position', 
-						JSON.stringify({year : 2014}))
+						JSON.stringify({year : q7_year}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -390,9 +509,24 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q7_set_res(data);
+							
 						});
 				}}>find_drivers_who_have_been_in_position</Button>
 			</Box>
+			{q7_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '40%' }}>
+					<DataGrid
+						rows={q7_res}
+						columns={q7_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -406,9 +540,18 @@ export default function App() {
 				>
 					Given a race, returns average pit stop durations for each driver in that race.
 				</Typography>
+
+				<TextField
+					label="Nationality"
+					helperText="Please enter"
+					value={q8_raceid}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q8_set_raceid(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/average_pitstop_of_drivers', 
-						JSON.stringify({race_id : 1002}))
+						JSON.stringify({race_id : q8_raceid}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -417,9 +560,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q8_set_res(data);
 						});
 				}}>average_pitstop_of_drivers</Button>
 			</Box>
+			{q8_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '40%' }}>
+					<DataGrid
+						rows={q8_res}
+						columns={q8_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -433,9 +590,18 @@ export default function App() {
 				>
 					Given a year, returns the average race finish position of each driver competing in that season.
 				</Typography>
+
+				<TextField
+					label="Nationality"
+					helperText="Please enter"
+					value={q9_year}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q9_set_year(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/average_position_of_drivers_ascend', 
-						JSON.stringify({race_year : 2001}))
+						JSON.stringify({race_year : q9_year}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -444,9 +610,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q9_set_res(data);
 						});
 				}}>average_position_of_drivers_ascend</Button>
 			</Box>
+			{q9_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '40%' }}>
+					<DataGrid
+						rows={q9_res}
+						columns={q9_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -472,9 +652,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q10_set_res(data);
 						});
 				}}>the_drivers_for_their_nationality</Button>
 			</Box>
+			{q10_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '80%' }}>
+					<DataGrid
+						rows={q10_res}
+						columns={q10_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -500,9 +694,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q11_set_res(data);
 						});
 				}}>constructors_with_zero_points</Button>
 			</Box>
+			{q11_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '80%' }}>
+					<DataGrid
+						rows={q11_res}
+						columns={q11_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -517,9 +725,18 @@ export default function App() {
 					Returns the total number of cumulative points of each 
 					driver who raced for a constructor which has more than 100 wins to its name.
 				</Typography>
+
+				<TextField
+					label="Nationality"
+					helperText="Please enter"
+					value={q12_won_count}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q12_set_won_count(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/best_drivers_from_best_constructors', 
-						JSON.stringify({won_count : 100}))
+						JSON.stringify({won_count : q12_won_count}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -544,9 +761,26 @@ export default function App() {
 				>
 					Given a driver surname and circuit name, returns the average lap time of a driver on all races on that circuit.
 				</Typography>
+
+				<TextField
+					label="Driver Surname"
+					helperText="Please enter"
+					value={q13_driver_surname}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q13_set_driver_surname(e.target.value);}}
+				/>
+
+				<TextField
+					label="Circuit ref"
+					helperText="Please enter"
+					value={q13_circuit_ref}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q13_set_circuit_ref(e.target.value);}}
+				/>
+
 				<Button variant="outlined" onClick={() => {
 					POST('/average_laptime_by_circuit', 
-						JSON.stringify({ driver_surname : 'Hamilton', circuit_ref : 'Istanbul Park'}))
+						JSON.stringify({ driver_surname : q13_driver_surname, circuit_ref : q13_circuit_ref}))
 						.then((response) => {
 							if(response.ok){
 								return response.json();
@@ -555,8 +789,21 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							q13_set_res(data[0]['AVG(LAP.milliseconds)/1000']);
 						});
 				}}>average_laptime_by_circuit</Button>
+			</Box>
+			<Box paddingLeft={2} paddingTop={3}>
+				{q13_res !== null && 
+					<TextField 
+						label='Avg Lap Time'
+						InputProps={{
+							readOnly: true,
+							endAdornment: <InputAdornment position="end">sec</InputAdornment>
+						}}
+						defaultValue={q13_res}
+					/>
+				}
 			</Box>
 		</Box>
 
