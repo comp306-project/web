@@ -1,4 +1,6 @@
-import { Button, Box, Typography, TextField, Divider } from '@mui/material';
+import { Button, Box, Typography, TextField, Divider, ImageList, ImageListItem } from '@mui/material';
+import koclogo from './img/gercek.png'
+import f1logo from './img/f1.png'
 
 function Member({name}){
 	return (
