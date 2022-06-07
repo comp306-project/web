@@ -31,10 +31,10 @@ export default function Intro(){
 					Members: 
 				</Typography>
 				<Member name= 'Altay Atalay'/>
-				<Member name= 'Deniz'/>
-				<Member name= 'Oya'/>
-				<Member name= 'Sema'/>
-				<Member name= 'Ata'/>
+				<Member name= 'Deniz Erdogan'/>
+				<Member name= 'Oya Suran'/>
+				<Member name= 'Sema Gure'/>
+				<Member name= 'Ata Sayin'/>
 		</Box>
 		<Box paddingLeft={3}>
 				<Box paddingBottom={1}>
@@ -46,7 +46,7 @@ export default function Intro(){
 						<Typography
 								variant='body1'
 						>
-							Formula 1 queries
+							Formula 1 Statistics Tool For Interested Fans and Strategists
 						</Typography>
 				</Box>
 				<Box>

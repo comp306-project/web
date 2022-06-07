@@ -127,7 +127,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Average pace difference between two drivers (in seconds)
 				</Typography>
 
 				<TextField
@@ -196,7 +196,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a race, average results of drivers grouped by the number of pitstops
 				</Typography>
 
 				<TextField
@@ -259,7 +259,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a circuit, average results of drivers grouped by the number of pitstops for all races done on that circuit
 				</Typography>
 
 				<TextField
@@ -323,7 +323,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a position, find the number of drivers who have never finished a race in that position grouped by nationality
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/find_countries_wins', 
@@ -350,7 +350,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a nationality, display names and surnames of drivers from that nation
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/find_country_drivers', 
@@ -377,7 +377,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a year, return all drivers who scored a podium place in that season.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/find_drivers_who_have_been_in_position', 
@@ -404,7 +404,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a race, returns average pit stop durations for each driver in that race.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/average_pitstop_of_drivers', 
@@ -431,7 +431,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a year, returns the average race finish position of each driver competing in that season.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/average_position_of_drivers_ascend', 
@@ -458,7 +458,8 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Returns the ids, the names, surnames, year and nationality of all 
+					drivers who have a race for a constructor whom they share the same nationality with for each year. 
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/the_drivers_for_their_nationality', 
@@ -485,7 +486,8 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					This query returns the name, nationality, best race finish and the interval they raced in Formula1 of each constructor 
+					who never scored a point.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/constructors_with_zero_points', 
@@ -512,7 +514,8 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Returns the total number of cumulative points of each 
+					driver who raced for a constructor which has more than 100 wins to its name.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/best_drivers_from_best_constructors', 
@@ -539,7 +542,7 @@ export default function App() {
 					paddingBottom={3}
 					textAlign='center'
 				>
-					Average lap time of a driver for a given race (in seconds)
+					Given a driver surname and circuit name, returns the average lap time of a driver on all races on that circuit.
 				</Typography>
 				<Button variant="outlined" onClick={() => {
 					POST('/average_laptime_by_circuit', 
