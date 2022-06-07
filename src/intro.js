@@ -70,6 +70,11 @@ export default function Intro(){
 						>
 							Backend: Python Flask  
 						</Typography>
+						<Typography
+								variant='body1'
+						>
+							Deployment: Docker + Google Cloud 
+						</Typography>
 				</Box>
 			</Box>
 		</Box>

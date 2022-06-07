@@ -7,19 +7,28 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import { Button, Box, Typography, TextField, Divider, InputAdornment, } from '@mui/material';
+import { Button, Box, Typography, TextField, Divider, InputAdornment, MenuItem} from '@mui/material';
 
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
+
 function POST(path, data) {
 	return fetch(`http://localhost:5000${path}`,
-	{
-		method: 'POST',
-		headers: {
-		  'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(data)
-	  }
+	  	{
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+	  	}
+	)
+}
+
+function GET(path){
+	return fetch(`http://localhost:5000${path}`,
+		{
+			method: 'GET'
+		}
 	)
 }
 
@@ -75,6 +84,12 @@ const q11_columns = [
 	{field: 'LastYear', headerName: 'Last Year', width: 150},
 ];
 
+const q12_columns = [
+	{field: 'forename', headerName: 'First Name', width: 150},
+	{field: 'surname', headerName: 'Last Name', width: 150},
+	{field: 'TotalPoints', headerName: 'Total Points', width: 150},
+];
+
 export default function App() {
 	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -87,6 +102,11 @@ export default function App() {
 			}),
 		[prefersDarkMode],
 	);
+
+	// q0
+	const [q0_forename, q0_set_forename] = useState('Lewis');
+	const [q0_surname, q0_set_surname] = useState('Hamilton');
+	const [q0_res, q0_set_res] = useState(null);
 
 	// q1
 	const [q1_raceid, q1_set_raceid] = useState(1009);
@@ -137,11 +157,99 @@ export default function App() {
 	const [q13_circuit_ref, q13_set_circuit_ref] = useState('Istanbul Park');
 	const [q13_res, q13_set_res] = useState(null);
 
+	const [circuits, set_circuits] = useState(null);
+	const [nationality, set_nationality] = useState(null);
+	//var circuits = null;
+
+	if(circuits === null){
+		GET('/circuits')
+		.then((response) => {
+			if(response.ok){
+				return response.json();
+			}
+		})
+		.then((data0) => {
+			data0 = JSON.parse(data0);
+			if(nationality === null){
+				GET('/nationality')
+				.then((response) => {
+					if(response.ok){
+						return response.json();
+					}
+				})
+				.then((data) => {
+					data = JSON.parse(data);
+					set_circuits(data0);
+					set_nationality(data);
+				});
+			}
+		});
+	}
+
+	
+
 	return (
+		
     <ThemeProvider theme={theme}>
       <CssBaseline />
 		<Header theme={theme} />
 		<Intro />
+
+		<Box>
+			<Divider variant='middle'>Query 0</Divider>
+			<Box paddingLeft={2}>
+				<Typography
+					variant='body1'
+					paddingTop={2}
+					paddingBottom={3}
+					textAlign='center'
+				>
+					Get driver id from surname and forename
+				</Typography>
+
+				<TextField
+					label="Surname"
+					helperText="Please enter"
+					value={q0_surname}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q0_set_surname(e.target.value);}}
+				/>
+
+				<TextField
+					label="Forename"
+					helperText="Please enter"
+					value={q0_forename}
+					sx={{paddingRight: '7px'}}
+					onChange={(e) => {q0_set_forename(e.target.value);}}
+				/>
+
+				<Button variant="outlined" onClick={() => {
+					POST('/get_driver_id', 
+						JSON.stringify({surname : q0_surname, forename : q0_forename}))
+						.then((response) => {
+							if(response.ok){
+								return response.json();
+							}
+						})
+						.then((data) => {
+							console.log(data);
+							data = JSON.parse(data);
+							q0_set_res(data[0]['driver_id']);
+						});
+				}}>Get Driver ID</Button>
+			</Box>
+			<Box paddingLeft={2} paddingTop={3}>
+				{q0_res !== null && 
+					<TextField 
+						label='Driver ID'
+						InputProps={{
+							readOnly: true,
+						}}
+						defaultValue={q0_res}
+					/>
+				}
+			</Box>
+		</Box>
 		
 		<Box>
 			<Divider variant='middle'>Query 1</Divider>
@@ -336,15 +444,25 @@ export default function App() {
 					Given a circuit, average results of drivers grouped by the number of pitstops for all races done on that circuit
 				</Typography>
 
-				<TextField
-					label="Circuit"
-					helperText="Please enter"
-					value={q4_circuit_ref}
-					sx={{paddingRight: '7px'}}
-					onChange={(e) => {q4_set_circuit_ref(e.target.value);}}
-				/>
+				{circuits !== null &&
+					<TextField
+						label="Circuit"
+						select
+						helperText="Please enter"
+						value={q4_circuit_ref}
+						sx={{paddingRight: '7px', width: '250px'}}
+						onChange={(e) => {q4_set_circuit_ref(e.target.value);}}
+					>
+						{
+							circuits.map((option) => (
+								<MenuItem key={option.circuit_ref} value={option.circuit_ref}>
+									{option.circuit_ref}
+								</MenuItem>
+							))
+						}
+					</TextField>
+				}
 
-				
 				<Button variant="outlined" onClick={() => {
 					POST('/average_race_results_by_pitstop_all_races_at_circuit', 
 						JSON.stringify({circuit_ref : q4_circuit_ref}))
@@ -440,13 +558,24 @@ export default function App() {
 					Given a nationality, display names and surnames of drivers from that nation
 				</Typography>
 
-				<TextField
-					label="Nationality"
-					helperText="Please enter"
-					value={q6_nationality}
-					sx={{paddingRight: '7px'}}
-					onChange={(e) => {q6_set_nationality(e.target.value);}}
-				/>
+				{nationality !== null &&
+					<TextField
+						label="Nationality"
+						select
+						helperText="Please enter"
+						value={q6_nationality}
+						sx={{paddingRight: '7px', width: '250px'}}
+						onChange={(e) => {q6_set_nationality(e.target.value);}}
+					>
+						{
+							nationality.map((option) => (
+								<MenuItem key={option.nationality} value={option.nationality}>
+									{option.nationality}
+								</MenuItem>
+							))
+						}
+					</TextField>
+				}
 
 				<Button variant="outlined" onClick={() => {
 					POST('/find_country_drivers', 
@@ -491,7 +620,7 @@ export default function App() {
 				</Typography>
 
 				<TextField
-					label="Nationality"
+					label="Year"
 					helperText="Please enter"
 					value={q7_year}
 					sx={{paddingRight: '7px'}}
@@ -542,7 +671,7 @@ export default function App() {
 				</Typography>
 
 				<TextField
-					label="Nationality"
+					label="Race ID"
 					helperText="Please enter"
 					value={q8_raceid}
 					sx={{paddingRight: '7px'}}
@@ -592,7 +721,7 @@ export default function App() {
 				</Typography>
 
 				<TextField
-					label="Nationality"
+					label="Year"
 					helperText="Please enter"
 					value={q9_year}
 					sx={{paddingRight: '7px'}}
@@ -727,7 +856,7 @@ export default function App() {
 				</Typography>
 
 				<TextField
-					label="Nationality"
+					label="Won Count"
 					helperText="Please enter"
 					value={q12_won_count}
 					sx={{paddingRight: '7px'}}
@@ -745,9 +874,23 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							for(let i = 0; i < data.length; i++){
+								data[i]['id'] = i;
+							}
+							q12_set_res(data);
 						});
 				}}>best_drivers_from_best_constructors</Button>
 			</Box>
+			{q12_res !== null && 
+				<Box paddingLeft={2} paddingTop={3} sx={{ height: 500, width: '80%' }}>
+					<DataGrid
+						rows={q12_res}
+						columns={q12_columns}
+						pageSize={10}
+						rowsPerPageOptions={[10]}
+					/>
+				</Box>
+			}
 		</Box>
 
 		<Box>
@@ -770,13 +913,25 @@ export default function App() {
 					onChange={(e) => {q13_set_driver_surname(e.target.value);}}
 				/>
 
-				<TextField
-					label="Circuit ref"
-					helperText="Please enter"
-					value={q13_circuit_ref}
-					sx={{paddingRight: '7px'}}
-					onChange={(e) => {q13_set_circuit_ref(e.target.value);}}
-				/>
+				{circuits !== null &&
+					<TextField
+						label="Circuit"
+						select
+						helperText="Please enter"
+						value={q13_circuit_ref}
+						onChange={(e) => {q13_set_circuit_ref(e.target.value);}}
+						sx={{paddingRight: '7px', width: '250px'}}
+					>
+						{
+							circuits.map((option) => (
+								<MenuItem key={option.circuit_ref} value={option.circuit_ref}>
+									{option.circuit_ref}
+								</MenuItem>
+							))
+						}
+					</TextField>
+				}
+
 
 				<Button variant="outlined" onClick={() => {
 					POST('/average_laptime_by_circuit', 
