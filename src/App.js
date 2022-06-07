@@ -219,9 +219,35 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							q3_set_res(data);
 						});
 				}}>average_race_results_by_pitstop_single_race</Button>
+				
 			</Box>
+
+			{q3_res !== null && 
+				q3_res.map((object, i) => {
+					return (
+						<Box key={i} paddingLeft={2} paddingTop={2}>
+							<TextField 
+								label='Pitstop Count'
+								sx={{paddingRight: '7px'}}
+								InputProps={{
+									readOnly: true,
+								}}
+								defaultValue={object['Pitstopcount']}
+							/>
+							<TextField 
+								label='Average Position Order'
+								InputProps={{
+									readOnly: true,
+								}}
+								defaultValue={object['AVG(position_order)']}
+							/>
+						</Box>
+					);
+				})
+			}
 		</Box>
 
 		<Box>
@@ -256,9 +282,36 @@ export default function App() {
 						.then((data) => {
 							console.log(data);
 							data = JSON.parse(data);
+							q4_set_res(data);
 						});
 				}}>average_race_results_by_pitstop_all_races_at_circuit</Button>
 			</Box>
+
+			{q4_res !== null && 
+				q4_res.map((object, i) => {
+					return (
+						<Box key={i} paddingLeft={2} paddingTop={2}>
+							<TextField 
+								label='Pitstop Count'
+								sx={{paddingRight: '7px'}}
+								InputProps={{
+									readOnly: true,
+								}}
+								defaultValue={object['Pitstopcount']}
+							/>
+							<TextField 
+								label='Average Position Order'
+								InputProps={{
+									readOnly: true,
+								}}
+								defaultValue={object['AVG(position_order)']}
+							/>
+						</Box>
+					);
+				})
+			}
+
+
 		</Box>
 
 		<Box>
@@ -393,6 +446,114 @@ export default function App() {
 							data = JSON.parse(data);
 						});
 				}}>average_position_of_drivers_ascend</Button>
+			</Box>
+		</Box>
+
+		<Box>
+			<Divider variant='middle'>Query 10</Divider>
+			<Box paddingLeft={2}>
+				<Typography
+					variant='body1'
+					paddingTop={2}
+					paddingBottom={3}
+					textAlign='center'
+				>
+					Average lap time of a driver for a given race (in seconds)
+				</Typography>
+				<Button variant="outlined" onClick={() => {
+					POST('/the_drivers_for_their_nationality', 
+						JSON.stringify({}))
+						.then((response) => {
+							if(response.ok){
+								return response.json();
+							}
+						})
+						.then((data) => {
+							console.log(data);
+							data = JSON.parse(data);
+						});
+				}}>the_drivers_for_their_nationality</Button>
+			</Box>
+		</Box>
+
+		<Box>
+			<Divider variant='middle'>Query 11</Divider>
+			<Box paddingLeft={2}>
+				<Typography
+					variant='body1'
+					paddingTop={2}
+					paddingBottom={3}
+					textAlign='center'
+				>
+					Average lap time of a driver for a given race (in seconds)
+				</Typography>
+				<Button variant="outlined" onClick={() => {
+					POST('/constructors_with_zero_points', 
+						JSON.stringify({}))
+						.then((response) => {
+							if(response.ok){
+								return response.json();
+							}
+						})
+						.then((data) => {
+							console.log(data);
+							data = JSON.parse(data);
+						});
+				}}>constructors_with_zero_points</Button>
+			</Box>
+		</Box>
+
+		<Box>
+			<Divider variant='middle'>Query 12</Divider>
+			<Box paddingLeft={2}>
+				<Typography
+					variant='body1'
+					paddingTop={2}
+					paddingBottom={3}
+					textAlign='center'
+				>
+					Average lap time of a driver for a given race (in seconds)
+				</Typography>
+				<Button variant="outlined" onClick={() => {
+					POST('/best_drivers_from_best_constructors', 
+						JSON.stringify({won_count : 100}))
+						.then((response) => {
+							if(response.ok){
+								return response.json();
+							}
+						})
+						.then((data) => {
+							console.log(data);
+							data = JSON.parse(data);
+						});
+				}}>best_drivers_from_best_constructors</Button>
+			</Box>
+		</Box>
+
+		<Box>
+			<Divider variant='middle'>Query 13</Divider>
+			<Box paddingLeft={2}>
+				<Typography
+					variant='body1'
+					paddingTop={2}
+					paddingBottom={3}
+					textAlign='center'
+				>
+					Average lap time of a driver for a given race (in seconds)
+				</Typography>
+				<Button variant="outlined" onClick={() => {
+					POST('/average_laptime_by_circuit', 
+						JSON.stringify({ driver_surname : 'Hamilton', circuit_ref : 'Istanbul Park'}))
+						.then((response) => {
+							if(response.ok){
+								return response.json();
+							}
+						})
+						.then((data) => {
+							console.log(data);
+							data = JSON.parse(data);
+						});
+				}}>average_laptime_by_circuit</Button>
 			</Box>
 		</Box>
 
